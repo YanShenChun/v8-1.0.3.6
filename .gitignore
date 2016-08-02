@@ -27,3 +27,13 @@
 *.exe
 *.out
 *.app
+
+# vim
+*.swp
+
+# scons
+obj
+*.pyc
+*.dblite
+# not sure why must add this!
+tools/js2c.pyc

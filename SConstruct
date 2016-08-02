@@ -111,7 +111,7 @@ V8_EXTRA_FLAGS = {
   'gcc': {
     'all': {
       'CXXFLAGS':     [], #['-fvisibility=hidden'],
-      'WARNINGFLAGS': ['-pedantic', '-Wall', '-Werror', '-W',
+      'WARNINGFLAGS': ['-pedantic', '-Wall', '-w', '-W',
           '-Wno-unused-parameter']
     },
     'arch:arm': {
@@ -170,7 +170,7 @@ MKSNAPSHOT_EXTRA_FLAGS = {
 DTOA_EXTRA_FLAGS = {
   'gcc': {
     'all': {
-      'WARNINGFLAGS': ['-Werror']
+      'WARNINGFLAGS': ['-w']
     }
   },
   'msvc': {
