@@ -57,6 +57,8 @@ int main(int argc, char* argv[]) {
   global->Set(v8::String::New("quit"), v8::FunctionTemplate::New(Quit));
   // Bind the 'version' function
   global->Set(v8::String::New("version"), v8::FunctionTemplate::New(Version));
+
+  int handle_num = handle_scope.NumberOfHandles();
   // Create a new execution environment containing the built-in
   // functions
   v8::Handle<v8::Context> context = v8::Context::New(NULL, global);
