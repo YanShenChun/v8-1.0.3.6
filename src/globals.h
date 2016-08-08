@@ -46,6 +46,8 @@ typedef unsigned __int64 uint64_t;
 #include <stdint.h>  // for intptr_t
 #endif  // _MSC_VER
 
+// g++ 4.8 need add the this explicitly
+#include <string.h>
 
 namespace v8 { namespace internal {
 
