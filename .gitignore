@@ -39,3 +39,7 @@ obj
 tools/js2c.pyc
 
 samples/shell
+samples/test-mark-stack
+*.dsym
+*.log
+

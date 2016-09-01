@@ -27,7 +27,8 @@
 
 // Platform specific code for MacOS goes here
 
-#include <ucontext.h>
+//#include <ucontext.h>
+#include <sys/ucontext.h>
 #include <unistd.h>
 #include <sys/mman.h>
 #include <mach/mach_init.h>
