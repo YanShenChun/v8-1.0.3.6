@@ -1,5 +1,5 @@
 set(tools_path  ${PROJECT_SOURCE_DIR}/tools)
-set(tmp_out_path ${PROJECT_BINARY_DIR}/tmp)
+set(tmp_out_path ${PROJECT_SOURCE_DIR}/src)
 set(libraries_source_files 
   "${CMAKE_CURRENT_SOURCE_DIR}/runtime.js"
   "${CMAKE_CURRENT_SOURCE_DIR}/v8natives.js"
@@ -17,6 +17,7 @@ set(libraries_source_files
 )
 
 set(sources 
+  "dtoa-config.c"
   "accessors.cc"
   "allocation.cc"
   "api.cc"
@@ -95,6 +96,14 @@ set(sources ${sources}
 
 if (CMAKE_SYSTEM_NAME MATCHES "Linux")
   set(sources ${sources} "platform-linux.cc")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Darwin")
+  set(sources ${sources} "platform-macos.cc")
+  # Fix warning: the Policy CMP0042 is not set: MACOSX_RPATH is enabled by default
+  set(CMAKE_MACOSX_RPATH on)
+elseif (CMAKE_SYSTEM_NAME MATCHES "FreeBSD")
+  set(sources ${sources} "platform-freebsd.cc")
+else()
+  set(sources ${sources} "platform-win32.cc")
 endif()
 
 set(v8_cxx_flags "-pedantic -Wall -w -W -Wno-unused-parameter -ansi -m32 -fno-rtti -fno-exceptions -fPIC -DENABLE_LOGGING_AND_PROFILING")
@@ -117,17 +126,19 @@ endif()
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/lib)
 include_directories(${PROJECT_SOURCE_DIR}/include)
 
-add_library(v8_artifact SHARED ${sources})
-
-#add_custom_command(
-#  OUTPUT ${tmp_out_path}/libraries.cc ${tmp_out_path}/libraries-empty.cc
-#  COMMAND ${tools_path}/js2c.py ${tmp_out_path}/libraries.cc ${tmp_out_path}/libraries-empty.cc CORE ${libraries_source_files}
-#)
-add_custom_target(
-  build_js
-  COMMAND mkdir ${tmp_out_path}
+add_custom_command(
+  OUTPUT ${tmp_out_path}/libraries.cc ${tmp_out_path}/libraries-empty.cc
   COMMAND ${tools_path}/js2c.py ${tmp_out_path}/libraries.cc ${tmp_out_path}/libraries-empty.cc CORE ${libraries_source_files}
 )
 
+add_custom_target(
+  build_js
+  DEPENDS ${tmp_out_path}/libraries.cc ${tmp_out_path}/libraries-empty.cc
+)
+
+set(sources ${sources} "${tmp_out_path}/libraries.cc")
+
+add_library(v8_g SHARED ${sources})
+add_dependencies(v8_g build_js)
 
 

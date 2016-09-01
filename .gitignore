@@ -35,11 +35,17 @@
 obj
 *.pyc
 *.dblite
-# not sure why must add this!
-tools/js2c.pyc
 
+# python byte code
+*.pyc
+
+# sample build files
 samples/shell
 samples/test-mark-stack
 *.dsym
 *.log
 
+# auto-generated file during cmake build
+build/
+src/libraries-empty.cc
+src/libraries.cc
